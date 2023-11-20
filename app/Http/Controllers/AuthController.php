@@ -2,90 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\User;
+use Illuminate\Support\Facades\Auth; // Corrected the namespace for User model
 
 class AuthController extends Controller
 {
-    //register user
+    // Register user
+    public function register(Request $request)
+    {
 
-    public function register(Request $request){
-
-    //vallidation
-    $attr = $request->validate([
-        'name'=>'required|string',
-        'email'=>'required|email|unique:user.email',
-        'password'=>'required|min:6|confirmed'
-    ]);
-   //create user
-
-   $user = user::create([
-      'name'=> $attr['name'],
-      'email'=> $attr['email'],
-      'password'=> bcrypt ($attr['password'])
-
-   ]);
-
-   //return user & token in response
-   return response([
-     'user'=>$user,
-     'token'=>$user ->createToken('secret')->plainTextToken
-
-
-   ],200);
-   
-
-    }
-    //login user
-    public function login(Request $request){
-
-        //vallidation
+        // Validation
         $attr = $request->validate([
-          
-            'email'=>'required|email',
-            'password'=>'required|min:6'
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email', // Corrected the table name
+            'password' => 'required|min:6|confirmed',
         ]);
-       //atempt login
-        if(!Auth::attempt($attr)){
 
+        // Create user
+        $user = User::create([
+            'name' => $attr['name'],
+            'email' => $attr['email'],
+            'password' => bcrypt($attr['password']),
+        ]);
+
+        // Return user & token in response
+        return response([
+            'user' => $user,
+            'token' => $user->createToken('secret')->plainTextToken,
+        ], 200);
+    }
+
+    // Login user
+    public function login(Request $request)
+    {
+
+        // Validation
+        $attr = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        // Attempt login
+        if (! Auth::attempt($attr)) {
             return response([
-               'message' =>'invalid credentilas.'
-            ],403);
+                'message' => 'Invalid credentials.',
+            ], 403);
         }
 
-    
-       //return user & token in response
-       return response([
-         'user'=> Auth()->$user,
-         'token'=> Auth()-$user ->createToken('secret')->plainTextToken
-    
-    
-       ],200);
-       
-    
-        }
+        // Return user & token in response
+        return response([
+            'user' => Auth::user(), // Corrected the syntax
+            'token' => Auth::user()->createToken('secret')->plainTextToken,
+        ], 200);
+    }
 
-        //logout
+    // Logout
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
 
-        public function logout(){
-           auth()->user()->token()->delete();
+        return response([
+            'message' => 'Logout success.',
+        ], 200);
+    }
 
-           return response([
-             'message'=>'logout success.'
-
-           ],200);
-
-        }
-
-     public function user(){
-
-         return response([
-             'user'=> Auth()->user()
-
-         ],200);
-     }
-
-
-
+    // Get user details
+    public function user()
+    {
+        return response([
+            'user' => Auth::user(),
+        ], 200);
+    }
 }
