@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController; // Corrected the namespace
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route; // Corrected the namespace
 
 /*
 |--------------------------------------------------------------------------
