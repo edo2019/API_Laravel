@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route; // Corrected the namespace
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,31 +16,31 @@ use Illuminate\Support\Facades\Route; // Corrected the namespace
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-//public routes
+// Public routes
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-//protected routes
+// Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    //user
+    // User
     Route::get('user', [AuthController::class, 'user']);
     Route::post('logout', [AuthController::class, 'logout']);
 
-    //posts
-    Routes::get('/posts', [PostController::class, 'index']); //all posts
-    Routes::post('/posts/{id}', [PostController::class, 'store']); //create post
-    Routes::get('/posts/{id}', [PostController::class, 'show']); //get single post
-    Routes::put('/posts/{id}', [PostController::class, 'update']); //update post
-    Routes::delete('/posts/{id}', [PostController::class, 'destroy']); //delete post
+    // Posts
+    Route::get('/posts', [PostController::class, 'index']); // All posts
+    Route::post('/posts', [PostController::class, 'store']); // Create post
+    Route::get('/posts/{id}', [PostController::class, 'show']); // Get single post
+    Route::put('/posts/{id}', [PostController::class, 'update']); // Update post
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']); // Delete post
 
-    //comments
-    Routes::get('/posts/{id}/comments', [PostController::class, 'index']); //all comments
-    Routes::post('/posts/{id}/comments', [PostController::class, 'store']); //create a comment on apost
-    Routes::put('/comments{id}', [PostController::class, 'update']); //update comment
-    Routes::delete('/comments{id}', [PostController::class, 'destroy']); //delete comment
+    // Comments
+    Route::get('/posts/{id}/comments', [CommentController::class, 'index']); // All comments
+    Route::post('/posts/{id}/comments', [CommentController::class, 'store']); // Create a comment on a post
+    Route::put('/comments/{id}', [CommentController::class, 'update']); // Update comment
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy']); // Delete comment
 
-    //Likes
-    Routes::get('/posts/{id}/likes', [PostController::class, 'likeordislike']); //like or dislike back post
+    // Likes
+    Route::get('/posts/{id}/likes', [LikeController::class, 'likeOrDislike']); // Like or dislike a post
 
 });
