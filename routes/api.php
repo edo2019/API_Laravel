@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +41,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']); // Delete comment
 
     // Likes
-    Route::get('/posts/{id}/likes', [LikeController::class, 'likeOrDislike']); // Like or dislike a post
+    Route::post('/posts/{id}/likes', [LikeController::class, 'likeOrDislike']); // Like or dislike a post
 
 });

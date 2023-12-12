@@ -8,14 +8,14 @@ use App\Models\Comment;
 class LikeController extends Controller
 {
     //
-    public function likeorunlike()
+    public function likeorDislike($id)
     {
         $post = Post::find($id);
 
-        if (! $post) {
+        if (!$post) {
             return response([
                 'message' => 'post not found',
-            ], 403);
+            ], 404);
 
         }
 
