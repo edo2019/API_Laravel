@@ -24,6 +24,8 @@ class AuthController extends Controller
             'name' => $attr['name'],
             'email' => $attr['email'],
             'password' => bcrypt($attr['password']),
+
+            
         ]);
 
         // Return user & token in response
